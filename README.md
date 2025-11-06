@@ -1,6 +1,6 @@
 # GAN-Method Application in China A-Share Market
 
-This is a replication and extension of Pelger & Xiong (2022) — “Interpretable Deep Learning for Asset Pricing.”
+This is a replication and extension of Chen, Luyang; Pelger, Markus; Zhu, Jason (2019) — “Deep Learning in Asset Pricing.”
 The project applies the Generative Adversarial Network (GAN) asset pricing framework to the Chinese A-share market (2010–2025).
 The goal is to test whether deep learning–based stochastic discount factor (SDF) models remain significant in a different market environment.
 
