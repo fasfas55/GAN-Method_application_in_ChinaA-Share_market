@@ -37,7 +37,7 @@ January 2010 – September 2025 (monthly data)
 | Testing    | 2023–2025 | Out-of-sample performance |
 
 ### Project Structure：
-<pre> 📂 GAN-Method_application_in_ChinaA-Share_market
+<pre>📂 GAN-Method_application_in_ChinaA-Share_market
 │
 ├── 📄 README.md                  # Project documentation
 ├── 📄 firm_char.py               # Script to build firm characteristics dataset
