@@ -46,7 +46,7 @@ January 2010 – September 2025 (monthly data)
 ├── 📄 train_beta.py              # Beta prediction network training
 ├── 📄 model_GAN.ipynb            # Notebook for SDF generation & pricing results
 ├── 📂 config/                    # Configuration files (JSON)
-├── 📂 Dataset/                   # Input data (A-share monthly data, macro variables)
+├── 📂 data/                      # Input data (A-share monthly data, macro variables)
 ├── 📂 output/                    # Model logs, trained weights, and evaluation results
 └── 📂 results/                   # Final pricing metrics and plots
 </pre>
