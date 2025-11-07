@@ -37,7 +37,7 @@ January 2010 – September 2025 (monthly data)
 | Testing    | 2023–2025 | Out-of-sample performance |
 
 ### Project Structure：
-<pre> ``
+<pre> 
 📂 GAN-Method_application_in_ChinaA-Share_market
 │
 ├── 📄 README.md                  # Project documentation
@@ -50,7 +50,7 @@ January 2010 – September 2025 (monthly data)
 ├── 📂 data/                      # Input data (A-share monthly data, macro variables)
 ├── 📂 output/                    # Model logs, trained weights, and evaluation results
 └── 📂 results/                   # Final pricing metrics and plots
-``` </pre>
+</pre>
 
 ### References
 · Chen, Luyang; Pelger, Markus; Zhu, Jason (2024). Deep Learning in Asset Pricing. Management Science, Vol. 70, No. 2, pp. 714-750. doi:10.1287/mnsc.2023.4695.
