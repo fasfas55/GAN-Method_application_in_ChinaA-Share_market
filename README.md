@@ -36,20 +36,47 @@ January 2010 – September 2025 (monthly data)
 | Validation | 2020–2022 | Hyperparameter tuning     |
 | Testing    | 2023–2025 | Out-of-sample performance |
 
-### Project Structure：
-<pre>📂 GAN-Method_application_in_ChinaA-Share_market
+### 📁 Project Structure
+
+<pre>
+GAN-Method_application_in_ChinaA-Share_market
 │
-├── 📄 README.md                  # Project documentation
-├── 📄 firm_char.py               # Script to build firm characteristics dataset
-├── 📄 macro_data_preprocess.py   # Script to collect and process macroeconomic predictors
-├── 📄 train_SDF.py               # GAN model training for SDF
-├── 📄 train_beta.py              # Beta prediction network training
-├── 📄 model_GAN.ipynb            # Notebook for SDF generation & pricing results
-├── 📂 config/                    # Configuration files (JSON)
-├── 📂 data/                      # Input data (A-share monthly data, macro variables)
-├── 📂 output/                    # Model logs, trained weights, and evaluation results
-└── 📂 results/                   # Final pricing metrics and plots
+├── README.md                     # Project documentation
+├── .gitattributes                # Git LFS tracking rules
+│
+├── code/                         # All Python scripts for data, model, and preprocessing
+│   ├── cleansing/                # Data cleaning scripts
+│   │   ├── cleansing_macro.py
+│   │   └── codename.py
+│   │
+│   ├── fetch/                    # Data fetching & preprocessing modules
+│   │   ├── fetch_basic.py
+│   │   ├── fetch_finin.py
+│   │   ├── fetch_rawdata.py
+│   │   └── fetch_sheets.py
+│   │
+│   ├── model/                    # GAN model definition & training utilities
+│   │   ├── GAN.py
+│   │   └── plot_loss.py
+│   │
+│   └── panel/                    # Panel data construction & calculations
+│       ├── firm_char.py
+│       └── panel_cal.py
+│
+├── data/                         # Input data (A-share characteristics & macro predictors)
+│   ├── firm_char/                # Zipped or parquet firm characteristics data
+│   │   ├── fina_indicator_2010_2025.zip
+│   │   └── panel_final.zip
+│   │
+│   └── macro/                    # Macroeconomic predictors (to be added)
+│
+├── result/1st_version/           # Logs, GAN training history, and evaluation results
+│   ├── loss_history_gan_1.parquet
+│   └── loss_history_unc_1.parquet
+│
+└── output/ (optional)            # Trained weights, saved models (add here if needed)
 </pre>
+
 
 ### References
 · Chen, Luyang; Pelger, Markus; Zhu, Jason (2024). Deep Learning in Asset Pricing. Management Science, Vol. 70, No. 2, pp. 714-750. doi:10.1287/mnsc.2023.4695.
