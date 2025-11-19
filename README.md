@@ -70,11 +70,11 @@ GAN-Method_application_in_ChinaA-Share_market
 │   │
 │   └── macro/                    # Macroeconomic predictors (to be added)
 │
-├── result/1st_version/           # Logs, GAN training history, and evaluation results
+├── output/1st_version/           # Logs, GAN training history, and evaluation results
 │   ├── loss_history_gan_1.parquet
 │   └── loss_history_unc_1.parquet
 │
-└── output/ (optional)            # Trained weights, saved models (add here if needed)
+└── result/                       # Trained weights, saved models (add here if needed)
 </pre>
 
 
