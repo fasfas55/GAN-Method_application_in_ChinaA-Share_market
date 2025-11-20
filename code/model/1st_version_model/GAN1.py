@@ -40,15 +40,14 @@ final_panel['date'] = pd.to_datetime(final_panel['date'])
 train_end = pd.Timestamp('2018-12-28') # 9 full years
 valid_end = pd.Timestamp('2021-12-31')
 
-# 2. Firm panel (X, R, mask)
 date = final_panel['date'].drop_duplicates().sort_values()
 date_index = {d: i for i, d in enumerate(date)}
 
 code = final_panel['code'].drop_duplicates().sort_values()
 code_index = {c: i for i, c in enumerate(code)}
 
-T = len(date) # unique dates
-N = len(code) # unique stocks
+T = len(date)
+N = len(code) 
 
 R = np.full((T, N), np.nan, dtype='float32')
 mask = np.zeros((T, N), dtype=bool)
@@ -69,29 +68,25 @@ for row in final_panel.itertuples():
     mask[t, n] = True
     X[t, n, :] = [getattr(row, col) for col in firm_cols]
 
-R = np.clip(R, -0.5, 0.5)  # cap monthly returns at [-50%, +50%]
+R = np.clip(R, -0.5, 0.5) 
 
 # Normalize firm features
-X_cs = X.copy()              # [T, N, F]
+X_cs = X.copy() 
 mask_float = mask.astype(bool)
 
-# 1) set missing stocks to NaN so they don't affect mean/std
 X_cs[~mask_float] = np.nan
 
-# 2) cross-sectional mean/std per time and feature
 means = np.nanmean(X_cs, axis=1, keepdims=True)   # [T, 1, F]
 stds  = np.nanstd(X_cs, axis=1, keepdims=True)    # [T, 1, F]
 
-# 3) For any time-feature with all NaN, set std=1, mean=0
 bad = ~np.isfinite(means) | (stds < 1e-6)
 means[~np.isfinite(means)] = 0.0
 stds[bad] = 1.0
 
-# 4) normalize
 X_norm = (X_cs - means) / stds
 X_norm = np.nan_to_num(X_norm, nan=0.0, posinf=0.0, neginf=0.0)
 
-X = X_norm # use this X going forward
+X = X_norm 
 
 # filter macro_arr
 required_cols = ['date', 'code', 'ret'] + firm_cols
@@ -162,37 +157,36 @@ class SDFGenerator(nn.Module):
         device = R.device
         T, N = R.shape
 
-        # --- macro features over time ---
+        # macro features over time
         if self.rnn is not None and macro is not None:
-            macro_in = macro.unsqueeze(0)        # [1, T, M]
-            macro_out, _ = self.rnn(macro_in)    # [1, T, H]
-            macro_feat = macro_out.squeeze(0)    # [T, H]
+            macro_in = macro.unsqueeze(0)        
+            macro_out, _ = self.rnn(macro_in)   
+            macro_feat = macro_out.squeeze(0)    
         else:
             macro_feat = macro if macro is not None else torch.zeros(T, 0, device=device)
 
         # tile macro over stocks
         if macro_feat.numel() > 0:
             macro_tiled = macro_feat.unsqueeze(1).expand(T, N, macro_feat.shape[-1])
-            feat = torch.cat([X, macro_tiled], dim=2)    # [T, N, F+M]
+            feat = torch.cat([X, macro_tiled], dim=2) 
         else:
-            feat = X                                     # [T, N, F]
+            feat = X
 
         # mask and flatten
         mask_f = mask.bool()
-        feat_masked = feat[mask_f]                       # [num_obs, Ftot]
-        R_masked = R[mask_f]                             # [num_obs]
+        feat_masked = feat[mask_f]
+        R_masked = R[mask_f]
 
         # MLP to get weights
-        h = self.mlp(feat_masked)                        # [num_obs, hidden]
-        w = self.last(h).squeeze(-1)                     # [num_obs]
+        h = self.mlp(feat_masked)
+        w = self.last(h).squeeze(-1)
 
         # scatter back to [T, N]
         w_full = torch.zeros_like(R, device=device)
         w_full[mask_f] = w
 
-        # SDF_t = 1 + sum_i w_{t,i} * R_{t,i}  (optionally normalized)
-        weighted_R = w_full * R * mask.float()           # [T, N]
-        N_i = mask.sum(dim=1).float()                    # [T]
+        weighted_R = w_full * R * mask.float()         
+        N_i = mask.sum(dim=1).float() 
 
         if self.normalize_w:
             N_bar = N_i.mean()
@@ -200,7 +194,7 @@ class SDFGenerator(nn.Module):
         else:
             sdf_core = weighted_R.sum(dim=1)
 
-        SDF = 1.0 + sdf_core                             # [T]
+        SDF = 1.0 + sdf_core
 
         return SDF, w_full
 
@@ -248,7 +242,7 @@ class MomentNet(nn.Module):
         if self.rnn is not None and macro is not None:
             macro_in = macro.unsqueeze(0)
             macro_out, _ = self.rnn(macro_in)
-            macro_feat = macro_out.squeeze(0)       # [T, H]
+            macro_feat = macro_out.squeeze(0)
         else:
             macro_feat = macro if macro is not None else torch.zeros(T, 0, device=device)
 
@@ -259,10 +253,10 @@ class MomentNet(nn.Module):
             feat = X
 
         mask_f = mask.bool()
-        feat_masked = feat[mask_f]                  # [num_obs, Ftot]
+        feat_masked = feat[mask_f]
 
         h_hidden = self.mlp(feat_masked)
-        h_out = torch.tanh(self.last(h_hidden))     # [num_obs, K]
+        h_out = torch.tanh(self.last(h_hidden))
 
         # back to [K, T, N]
         h_full = torch.zeros((self.num_moments, T, N), device=device)
@@ -277,7 +271,7 @@ def unconditional_loss(SDF, R, mask):
     """
     h = 1  → E[M R - 1] ≈ 0
     """
-    price_err = (SDF.unsqueeze(1) * R - 1.0) * mask.float()  # [T, N]
+    price_err = (SDF.unsqueeze(1) * R - 1.0) * mask.float()
     denom = mask.float().sum()
     mean_err = price_err.sum() / (denom + 1e-8)
     return mean_err.pow(2)
@@ -289,7 +283,7 @@ def conditional_loss(SDF, R, mask, h_full):
     L(M, ω) = E[(M R - 1) * ω]
     minimize over M, maximize over ω
     """
-    price_err = (SDF.unsqueeze(1) * R - 1.0) * mask.float()  # [T, N]
+    price_err = (SDF.unsqueeze(1) * R - 1.0) * mask.float()
     K = h_full.shape[0]
 
     # broadcast price_err to [K, T, N]
@@ -298,7 +292,7 @@ def conditional_loss(SDF, R, mask, h_full):
 
     # moment_k = average over t, i of pe * h_k
     denom = mask.float().sum()
-    moments = (pe * h_masked).sum(dim=(1, 2)) / (denom + 1e-8)  # [K]
+    moments = (pe * h_masked).sum(dim=(1, 2)) / (denom + 1e-8) 
     return (moments.pow(2)).mean()
 
 
@@ -354,14 +348,14 @@ def evaluate_pricing_errors(gen, R, X, macro, mask, device=None, name="TEST"):
         macro_t = torch.tensor(macro, dtype=torch.float32, device=device)
 
     gen.eval()
-    SDF, w_full = gen(R_t, X_t, macro_t, mask_t)   # SDF: [T], w_full: [T, N]
+    SDF, w_full = gen(R_t, X_t, macro_t, mask_t)  
 
-    # pricing error: M_t R_ti - 1
-    price_err = (SDF.unsqueeze(1) * R_t - 1.0) * mask_t.float()   # [T, N]
+    # pricing error
+    price_err = (SDF.unsqueeze(1) * R_t - 1.0) * mask_t.float()
 
     # cross-sectional average each time
-    N_t = mask_t.float().sum(dim=1)                             # [T]
-    cs_mean_err = price_err.sum(dim=1) / (N_t + 1e-8)           # [T]
+    N_t = mask_t.float().sum(dim=1)                             
+    cs_mean_err = price_err.sum(dim=1) / (N_t + 1e-8)           
 
     mean_err = cs_mean_err.mean().item()
     std_err  = cs_mean_err.std().item()
@@ -385,11 +379,11 @@ def evaluate_sdf_factor(gen, R, X, macro, mask, device=None, name="TEST", freq_p
         macro_t = torch.tensor(macro, dtype=torch.float32, device=device)
 
     gen.eval()
-    SDF, w_full = gen(R_t, X_t, macro_t, mask_t)   # w_full: [T, N]
+    SDF, w_full = gen(R_t, X_t, macro_t, mask_t)   
 
-    # factor return f_t = normalized weighted return
-    w_abs_sum = (w_full.abs() * mask_t.float()).sum(dim=1) + 1e-8  # [T]
-    f_t = (w_full * R_t * mask_t.float()).sum(dim=1) / w_abs_sum   # [T]
+    # factor return
+    w_abs_sum = (w_full.abs() * mask_t.float()).sum(dim=1) + 1e-8  
+    f_t = (w_full * R_t * mask_t.float()).sum(dim=1) / w_abs_sum  
 
     f_np = f_t.cpu().numpy()
     mean_ret = f_np.mean()
@@ -470,7 +464,6 @@ def train_gan_sdf(
         history["unc_epoch"].append(epoch + 1)
         history["unc_loss_train"].append(loss_u.item())
 
-        # optional validation monitoring
         if Rv is not None and (epoch + 1) % log_valid_every == 0:
             val_u, val_c, val_r = eval_losses(gen, moment, Rv, Xv, macrov, maskv)
             history["unc_loss_valid"].append(val_u)
@@ -479,14 +472,12 @@ def train_gan_sdf(
             print(f"[Unc] Epoch {epoch+1}/{num_epochs_unc}, loss={loss_u.item():.4f}")
             print(f"   [Valid] u={val_u:.4f} c={val_c:.4f} r={val_r:.4f}")
         else:
-            # keep alignment: fill None when not evaluated
             history["unc_loss_valid"].append(None)
             history["unc_cond_valid"].append(None)
             history["unc_res_valid"].append(None)
 
     # Phase 2: adversarial training
     for epoch in range(num_epochs):
-        # (a) update moment / discriminator: maximize conditional loss
         for _ in range(moment_steps):
             moment.train()
             gen.eval()
@@ -494,10 +485,9 @@ def train_gan_sdf(
             SDF, _ = gen(R_train, X_train, macro_train, mask_train)
             h = moment(R_train, X_train, macro_train, mask_train)
             loss_m = conditional_loss(SDF, R_train, mask_train, h)
-            (-loss_m).backward()     # maximize → minimize negative
+            (-loss_m).backward()   
             opt_mom.step()
 
-        # (b) update generator: minimize conditional + residual
         gen.train()
         moment.eval()
         opt_gen.zero_grad()
@@ -534,7 +524,7 @@ def train_gan_sdf(
         return gen, moment, w_full
 
 
-dates = date.to_numpy()  # date is your unique dates Series
+dates = date.to_numpy() 
 
 train_mask_t = dates <= train_end
 valid_mask_t = (dates > train_end) & (dates <= valid_end)
@@ -610,7 +600,7 @@ history_unc = pd.DataFrame({
     "valid_res_loss": history["unc_res_valid"],
 })
 
-# history_unc.to_parquet("loss_history_unc.parquet")
+history_unc.to_parquet("loss_history_unc.parquet")
 
 # GAN PHASE HISTORY
 history_gan = pd.DataFrame({
@@ -622,5 +612,6 @@ history_gan = pd.DataFrame({
     "valid_res_loss": history["gan_res_valid"],
 })
 
-# history_gan.to_parquet("loss_history_gan.parquet")
+history_gan.to_parquet("loss_history_gan.parquet")
+
 
