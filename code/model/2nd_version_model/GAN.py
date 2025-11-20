@@ -693,7 +693,7 @@ def train_gan_sdf(
     else:
         return gen, moment, w_full
 
-seed = [10086]
+seed = [10086,2025,2004,11,20]
 results = []
 
 print("\n=== Multi-seed runs (LSTM SDF) ===")
@@ -873,4 +873,5 @@ for sd in seed:
 
 print("\n=== Summary ===")
 for seed, s in results:
+
     print(f"Seed {seed}: TEST Sharpe = {s:.3f}")
