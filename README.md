@@ -56,8 +56,9 @@ GAN-Method_application_in_ChinaA-Share_market
 │   │   └── fetch_sheets.py
 │   │
 │   ├── model/                    # GAN model definition & training utilities
-│   │   ├── GAN.py
+│   │   ├── 1st & 2nd_version GAN.py
 │   │   └── plot_loss.py
+│   │   └── result.py
 │   │
 │   └── panel/                    # Panel data construction & calculations
 │       ├── firm_char.py
@@ -70,11 +71,13 @@ GAN-Method_application_in_ChinaA-Share_market
 │   │
 │   └── macro/                    # Macroeconomic predictors (to be added)
 │
-├── output/1st_version/           # Logs, GAN training history, and evaluation results
-│   ├── loss_history_gan_1.parquet
-│   └── loss_history_unc_1.parquet
+├── output           # Logs, GAN training history, and evaluation results
+│   │
+│   │──1st_version
+│   │
+│   │──2nd_version
 │
-└── result/                       # Trained weights, saved models (add here if needed)
+└── result                       # Trained weights, saved models
 </pre>
 
 
