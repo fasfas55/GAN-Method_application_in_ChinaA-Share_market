@@ -1,0 +1,105 @@
+variable,coef,t_stat
+intercept,0.04371102289230317,0.675134401419538
+China: PPI: Means of Production: Mining & Quarrying Industry: YoY,-164278.69189086667,-309411.0953689576
+China: CPI: Health Care: YoY,16287.895590985705,25483.982713224475
+China: CPI: Non-food: YoY,-5.404648263711351,-3.2694967553665073
+China: CPI: Clothing: YoY,1.1246782115249516,1.6659392508350872
+China: CPI: Consumer Goods: YoY,0.5278964161261683,0.1348852269089908
+China: CPI: Food: YoY,0.6889372122514033,0.4530234002075138
+China: CPI: Residence: YoY,2.3207921436005563,2.321024385318404
+"China: CPI: Education, Culture and Recreation: YoY",0.2819748401288962,0.8553650031664999
+China: CPI: Transport and Communications: YoY,2.971683940688308,3.1484172243039716
+China: CPI: Services: YoY,1.5413946810149355,1.3537909915063755
+China: Manufacturing PMI: Employees,0.05163996847477392,0.16771653346576434
+China:Treasury Bond Yield to Maturity Curve: 10Y,-42034.894171089414,-26472.709522149107
+China: Central Bank Policy Rates,1.0013368986074056,0.9671811404830898
+China: PPI: YoY,-1.3406802468198293,-1.2336656199482896
+China: PPI: Consumer Goods: YoY,1.258815930563287,2.240331185191149
+Global: Spot Price: Crude Oil (UK Brent Dtd),1.4503148869735014,1.058105692363576
+CSI 300 Index,-15.217484914461238,-1.666792524059683
+China: CPI: YoY,-1.1657303054489603,-0.3327834472656637
+China: Exports: YoY,-0.24110893521719845,-1.0332295645949592
+China: Manufacturing PMI,0.6500770797792939,1.2071637415604497
+China: Manufacturing PMI: New Orders,-0.8116190696418926,-1.42271690889883
+China:Yield To Maturity of T-Bond: 1Y,57043.43397289382,32814.238800944964
+China: CPI: Consumer Goods: YoY.1,0.5241864423114748,0.13393727453881452
+China: CPI: Clothing: YoY.1,1.1034987687307876,1.6345670194565383
+China: CPI: Health Care: YoY.1,16287.896341091284,25483.983891462096
+China: CPI: Residence: YoY.1,2.3114919189174543,2.3117232299009896
+China: Manufacturing PMI.1,0.6482442181295482,1.203760200355071
+China: PPI: YoY.1,-1.3469943674681417,-1.2394757402765875
+China: Manufacturing PMI: New Orders.1,-0.8096434638100618,-1.4192537967918701
+China: Exports: YoY.1,-0.24107373739389004,-1.0330787305252012
+China: CPI: YoY.1,-1.1656203805068799,-0.3327520667645429
+China: PPI: Consumer Goods: YoY.1,1.2619523330431548,2.2459130817301522
+China: Manufacturing PMI: Employees.1,0.05044249404090806,0.16382737034766676
+China: CPI: Non-food: YoY.1,-5.398291838524528,-3.2656514892198656
+China: CPI: Transport and Communications: YoY.1,2.972113007301232,3.148871808565622
+China: CPI: Services: YoY.1,1.5395331954441644,1.3521560680003835
+China: CPI: Food: YoY.1,0.689196036730209,0.45319359502600126
+"China: CPI: Education, Culture and Recreation: YoY.1",0.2824346568158944,0.8567598478640404
+CFETS: Spot Exchange Rate: CAD/CNY,-0.3332679195300443,-0.9035126928493861
+CFETS: Spot Exchange Rate: 100 JPY/CNY,-0.9795694970307522,-0.9779317895623231
+China:Yield To Maturity of T-Bond: 6M,1.7067739259437076,0.6047011429514851
+China:Yield To Maturity of T-Bond: 5Y,1.6694413217737747,1.222604849684215
+China: PPI: Means of Production: Mining & Quarrying Industry: YoY.1,-164278.69664480726,-309411.10449214367
+CSI 301 Index,-14.819820362834434,-1.5380805393988504
+CFETS: Spot Exchange Rate: USD/CNY,0.8151130305232073,1.0316939149737407
+CFETS: Spot Exchange Rate: GBP/CNY,0.26090108231437625,0.5521034899202877
+China: M1: YoY,2149778.6885376866,11304321.760714907
+China: AFRE (flow),-0.3054578213777859,-2.05719193780563
+China: M2: YoY,-1005243.3079018365,-1991465.5497707068
+China: Reserve Money: Monetary Authority,-0.04537485736000235,-0.05590184356934255
+China: M1: YoY.1,2149778.689031721,11304321.76331128
+China: M2: YoY.1,-1005243.307934999,-1991465.5498362936
+China: Reserve Money: Monetary Authority.1,-0.045624308488186216,-0.05620916746537705
+China: AFRE (flow).1,-0.30542374906508485,-2.056962468195823
+China: Industrial Added Value: Industrial Enterprises Above Designated Sizee: YoY(January-February Split).1,0.4688518996754283,1.3540425330772137
+China: Industrial Added Value: Industrial Enterprises Above Designated Sizee: YoY(January-February Split),0.4690511681310454,1.3546180196318962
+China: Electricity Consumption by Urban and Rural Households,-0.12114906264287129,-0.6221320204518276
+China: Macro-economic Climate Index: Coincident Index,-0.07285582812983193,-0.20467711403737357
+China: Macro-economic Climate Index: Coincident Index.1,-0.07285478982157656,-0.2046741970718697
+China: Electricity Consumption by Urban and Rural Households.1,-0.12114614303391136,-0.6221170274986694
+China: Employed Persons,-4.240945130455657,-1.3475405503231785
+China: Urban Employed Persons,41.82100487778371,2.9158448284456866
+China: Per Capita Disposable Income of Households,-36.477457982743545,-2.7291278978056077
+China: No. of Employed Persons: Urban Non-private Units,-4.329795687772275,-2.275930040478588
+China: Output: Motor Vehicles: YoY,0.1266670090462867,0.40801059218511626
+China: Output: Motor Vehicles: YoY.1,0.1266670090462867,0.40801059218511626
+China: Total Retail Sales of Consumer Goods: YoY(January-February Combined).1,-0.8594784454799083,-1.4691802494704667
+China: Total Retail Sales of Consumer Goods: YoY(January-February Combined),-0.8594784454799083,-1.4691802494704667
+China: FAI: YoY: YTD,1.3338348436673186,1.2014077928014648
+China: Floor Space of Newly-started Buildings: YoY: YTD,0.29845414988085395,0.5241139306900636
+China: Completed Investment in Real Estate Development: YoY: YTD,-0.8526951316816849,-1.0119920461794452
+China: Completed Investment in Real Estate Development: YoY: YTD.1,-0.8526951316816849,-1.0119920461794452
+China: Floor Space of Newly-started Buildings: YoY: YTD.1,0.29845414988085395,0.5241139306900636
+China: FAI: YoY: YTD.1,1.3338348436673186,1.2014077928014648
+China: Output: Rolled Steel.1,0.5777126015309477,0.9000662834177392
+China: Electricity Generation.1,0.060408778008422814,0.14864764156201055
+China: Output: Rolled Steel,0.5777126015309477,0.9000662834177392
+China: Electricity Generation,0.060408778008422814,0.14864764156201055
+China: Flow of Funds Accounts: Financial Transaction: Sources: Loans: Non-financial Corporations,0.4476903441827744,0.9390208884740422
+China: Flow of Funds Accounts: Financial Transaction: Sources: Loans: Households,-2.4786012438271428,-0.774391174472829
+"China: Output: Agricultural Nitrogen, Phosphorus and Potassium Fertilizer (100% Pure)",0.24043473435449414,1.0398117283528923
+China: Output: Plate Glass,-0.34475803530949634,-1.0873115142680458
+"China: Output: Agricultural Nitrogen, Phosphorus and Potassium Fertilizer (100% Pure).1",0.24043473435449414,1.0398117283528923
+China: Output: Cement.1,-0.1919892656223965,-0.9956185372863912
+China: Output: Plate Glass.1,-0.34475803530949634,-1.0873115142680458
+China: Output: Cement,-0.1919892656223965,-0.9956185372863912
+China: Output: Air Conditioner: YoY,-0.05437996520049637,-0.32744046292917084
+China: Output: Air Conditioner: YoY.1,-0.05437996520049637,-0.32744046292917084
+China: Value-added of Industry: Industrial Enterprises Above Designated Size: Mining and Dressing of Ferrous Metal Ores: YoY.1,-0.030440352860750863,-0.09971855119471365
+China: Value-added of Industry: Industrial Enterprises Above Designated Size: Mining and Dressing of Non-ferrous Metal Ores: YoY.1,-0.2684617160412017,-1.1151633709575712
+China: Value-added of Industry: Industrial Enterprises Above Designated Size: Manufacture of General Purpose Machinery: YoY,0.4438834073898761,1.7002456973803157
+China: Value-added of Industry: Industrial Enterprises Above Designated Size: Mining and Dressing of Non-ferrous Metal Ores: YoY,-0.2684617160412017,-1.115163370955245
+China: Value-added of Industry: Industrial Enterprises Above Designated Size: Manufacture of Foods: YoY.1,-0.07161233335500583,-0.22576099058626253
+China: Value-added of Industry: Industrial Enterprises Above Designated Size: Manufacture of Textile Apparel: YoY.1,0.16065721112681786,0.31832967947770785
+China: Value-added of Industry: Industrial Enterprises Above Designated Size: Manufacture of General Purpose Machinery: YoY.1,0.4438834073898761,1.7002456973784221
+China: Value-added of Industry: Industrial Enterprises Above Designated Size: Manufacture of Foods: YoY,-0.07161233335500583,-0.22576099058590202
+China: Value-added of Industry: Industrial Enterprises Above Designated Size: Manufacture of Textile Apparel: YoY,0.16065721112681786,0.3183296794714642
+China: Value-added of Industry: Industrial Enterprises Above Designated Size: Mining and Dressing of Ferrous Metal Ores: YoY,-0.030440352860750863,-0.09971855119371872
+China: CPI: Excluding Food and Energy (Core CPI): YoY,0.6548347148200264,1.0313405537621305
+China: CPI: Excluding Food and Energy (Core CPI): YoY.1,0.6548347148200264,1.031340553681307
+Yield_Slope_10Y_1Y,38509.01740712245,37834.337913553
+Inflation_Gap_CPI_PPI,-322665.4667407902,-607349.6283138916
+Money_Gap_M2_M1,3418139.4009910603,11638167.668548895
