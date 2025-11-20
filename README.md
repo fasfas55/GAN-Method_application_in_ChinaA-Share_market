@@ -80,6 +80,12 @@ GAN-Method_application_in_ChinaA-Share_market
 └── result                       # Trained weights, saved models
 </pre>
 
+### Result Preview
+<img width="6000" height="3600" alt="decile_panel" src="https://github.com/user-attachments/assets/86b2dfc8-2b12-4e44-ac17-3cd9ae3b517a" />
+<img width="3600" height="1800" alt="firm_betas_top20" src="https://github.com/user-attachments/assets/0cf1aa4f-5163-4d68-8cd6-8f5bb90ead04" />
+<img width="3600" height="1800" alt="macro_top20" src="https://github.com/user-attachments/assets/dc5c5ab0-c851-48af-968e-428d45ce8d98" />
+
+
 
 ### References
 · Chen, Luyang; Pelger, Markus; Zhu, Jason (2024). Deep Learning in Asset Pricing. Management Science, Vol. 70, No. 2, pp. 714-750. doi:10.1287/mnsc.2023.4695.
