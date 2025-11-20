@@ -149,7 +149,6 @@ class SDFGenerator(nn.Module):
                 raise ValueError(f"Unknown rnn_type: {rnn_type}")
             macro_out_dim = rnn_hidden
         else:
-            # no recurrent layer; use macro_t directly
             self.rnn = None
             macro_out_dim = macro_feature_dim
 
@@ -165,16 +164,10 @@ class SDFGenerator(nn.Module):
         nn.init.xavier_uniform_(self.last.weight)
 
     def forward(self, R, X, macro, mask):
-        """
-        R:     [T, N]
-        X:     [T, N, F]
-        macro: [T, M] or None
-        mask:  [T, N] bool
-        """
         device = R.device
         T, N = R.shape
 
-        # --- macro features over time ---
+        # macro features over time
         if self.rnn is not None and macro is not None:
             macro_in = macro.unsqueeze(0)        # [1, T, M]
             macro_out, _ = self.rnn(macro_in)    # [1, T, H]
@@ -202,7 +195,6 @@ class SDFGenerator(nn.Module):
         w_full = torch.zeros_like(R, device=device)
         w_full[mask_f] = w
 
-        # SDF_t = 1 + sum_i w_{t,i} * R_{t,i}  (optionally normalized)
         weighted_R = w_full * R * mask.float()           # [T, N]
         N_i = mask.sum(dim=1).float()                    # [T]
 
@@ -252,7 +244,6 @@ class MomentNet(nn.Module):
                 raise ValueError(f"Unknown rnn_type: {rnn_type}")
             macro_out_dim = rnn_hidden
         else:
-            # no recurrent layer; use macro_t directly
             self.rnn = None
             macro_out_dim = macro_feature_dim
 
@@ -323,13 +314,12 @@ def conditional_loss(SDF, R, mask, h_full):
     moments = (pe * h_masked).sum(dim=(1, 2)) / (denom + 1e-8)  # [K]
     return (moments.pow(2)).mean()
 
-
+# cross-section res_loss monitor SDF training
 def residual_loss(w_full, R, mask):
     mask_f = mask.bool()
     w = w_full[mask_f]
     r = R[mask_f]
-
-    # linear projection r_hat = alpha * w
+    
     alpha = (r * w).sum() / (w.pow(2).sum() + 1e-8)
     r_hat = alpha * w
 
@@ -371,14 +361,14 @@ def evaluate_pricing_errors(gen, R, X, macro, mask, device=None, name="TEST"):
         macro_t = torch.tensor(macro, dtype=torch.float32, device=device)
 
     gen.eval()
-    SDF, w_full = gen(R_t, X_t, macro_t, mask_t)   # SDF: [T], w_full: [T, N]
+    SDF, w_full = gen(R_t, X_t, macro_t, mask_t)
 
     # pricing error: M_t R_ti - 1
-    price_err = (SDF.unsqueeze(1) * R_t - 1.0) * mask_t.float()   # [T, N]
+    price_err = (SDF.unsqueeze(1) * R_t - 1.0) * mask_t.float()
 
     # cross-sectional average each time
-    N_t = mask_t.float().sum(dim=1)                             # [T]
-    cs_mean_err = price_err.sum(dim=1) / (N_t + 1e-8)           # [T]
+    N_t = mask_t.float().sum(dim=1)
+    cs_mean_err = price_err.sum(dim=1) / (N_t + 1e-8)
 
     mean_err = cs_mean_err.mean().item()
     std_err  = cs_mean_err.std().item()
@@ -477,6 +467,7 @@ def summarize_and_export_firm_betas(betas, feature_names=None, fname="firm_char_
     print(f"[Saved] Firm characteristic importance → {fname}")
     return df
 
+# standardize for visualization
 def macro_regression_standardized(factor, macro, macro_names, fname="macro_importance.csv"):
     factor = np.asarray(factor).reshape(-1)
     macro = np.asarray(macro)
@@ -488,7 +479,6 @@ def macro_regression_standardized(factor, macro, macro_names, fname="macro_impor
     # Standardize factor
     factor_std = (factor - factor.mean()) / (factor.std() + 1e-6)
 
-    # Add intercept
     X = np.hstack([np.ones((T, 1)), macro_std])
     y = factor_std.reshape(-1, 1)
 
@@ -635,12 +625,11 @@ def train_gan_sdf(
 
     # Phase 2: adversarial training
     for epoch in range(num_epochs):
-        # (a) update moment / discriminator
+        # moment / discriminator
         for _ in range(moment_steps):
             moment.train()
             opt_mom.zero_grad()
 
-            # key: if generator uses RNN, avoid backprop through it here
             if getattr(gen, "use_rnn", False):
                 gen.eval()
                 with torch.no_grad():
@@ -654,7 +643,7 @@ def train_gan_sdf(
             (-loss_m).backward()
             opt_mom.step()
 
-        # (b) update generator
+        # generator
         gen.train()
         moment.eval()
         opt_gen.zero_grad()
@@ -747,12 +736,12 @@ for sd in seed:
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    # # run train
-    # results = []
+    # run train
+    results = []
 
-    # for seed in [10086, 2026, 12, 1]:
-    #     print(f"\n===== Running seed = {seed} =====")
-    #     set_seed(seed)
+    for seed in [10086, 2026, 12, 1]:
+        print(f"\n===== Running seed = {seed} =====")
+        set_seed(seed)
 
     gen, moment, history, w_full  = train_gan_sdf(
         R_train, X_train, macro_train, mask_train,
@@ -778,8 +767,8 @@ for sd in seed:
     # check if the model collapse
     print(w_full.mean(), w_full.std())
 
-    # # Record the seed
-    # results.append((seed, sharpe_test))
+    # Record the seed
+    results.append((seed, sharpe_test))
 
     # UNCONDITIONAL PHASE HISTORY
     history_unc = pd.DataFrame({
@@ -802,7 +791,7 @@ for sd in seed:
         "valid_res_loss": history["gan_res_valid"],
     })
 
-    # history_gan.to_parquet("loss_history_gan.parquet")
+    history_gan.to_parquet("loss_history_gan.parquet")
 
     # firm weights export
     device = next(gen.parameters()).device  # or torch.device(...)
@@ -818,55 +807,55 @@ for sd in seed:
     mask_valid_t  = torch.tensor(mask_valid,  dtype=torch.bool,   device=device)
     macro_valid_t = None if macro_valid is None else torch.tensor(macro_valid, dtype=torch.float32, device=device)
 
-    # with torch.no_grad():
-    #     # weights for TRAIN
-    #     SDF_train, w_train = gen(R_train_t, X_train_t, macro_train_t, mask_train_t)   # [T_train, N]
-    #
-    #     # weights for VALID
-    #     SDF_valid, w_valid = gen(R_valid_t, X_valid_t, macro_valid_t, mask_valid_t)   # [T_valid, N]
-    #
-    # # Now build combined arrays that are time-aligned
-    # X_all    = torch.cat([X_train_t,    X_valid_t],    dim=0)   # [T_train+T_valid, N, F]
-    # mask_all = torch.cat([mask_train_t, mask_valid_t], dim=0)   # [T_train+T_valid, N]
-    # w_all    = torch.cat([w_train,      w_valid],      dim=0)   # [T_train+T_valid, N]
-    #
-    # T_all, N_total, F = X_all.shape
-    #
-    # firm_betas, firm_valid_ts = compute_cs_betas(w_all, X_all, mask_all)
-    # print("Firm betas shape:", firm_betas.shape)
-    #
-    # firm_df = summarize_and_export_firm_betas(
-    #     firm_betas,
-    #     feature_names=firm_cols,    # or None
-    #     fname="firm_char_importance.csv"
-    # )
+    with torch.no_grad():
+        # weights for TRAIN
+        SDF_train, w_train = gen(R_train_t, X_train_t, macro_train_t, mask_train_t)   # [T_train, N]
+    
+        # weights for VALID
+        SDF_valid, w_valid = gen(R_valid_t, X_valid_t, macro_valid_t, mask_valid_t)   # [T_valid, N]
+    
+    # Now build combined arrays that are time-aligned
+    X_all    = torch.cat([X_train_t,    X_valid_t],    dim=0)   # [T_train+T_valid, N, F]
+    mask_all = torch.cat([mask_train_t, mask_valid_t], dim=0)   # [T_train+T_valid, N]
+    w_all    = torch.cat([w_train,      w_valid],      dim=0)   # [T_train+T_valid, N]
+    
+    T_all, N_total, F = X_all.shape
+    
+    firm_betas, firm_valid_ts = compute_cs_betas(w_all, X_all, mask_all)
+    print("Firm betas shape:", firm_betas.shape)
+    
+    firm_df = summarize_and_export_firm_betas(
+        firm_betas,
+        feature_names=firm_cols,    # or None
+        fname="firm_char_importance.csv"
+    )
 
-    # # decile
-    # export_all_deciles(w_all, X_all, mask_all, firm_cols)
+    # decile
+    export_all_deciles(w_all, X_all, mask_all, firm_cols)
 
-    # # factor_train, factor_valid compiled into factor_all
-    # R_all_np     = np.concatenate([R_train,  R_valid],  axis=0)   # [T_all, N]
-    # X_all_np     = np.concatenate([X_train,  X_valid],  axis=0)   # [T_all, N, F]
-    # mask_all_np  = np.concatenate([mask_train, mask_valid], axis=0)   # [T_all, N]
-    # macro_all_np = np.concatenate([macro_train, macro_valid], axis=0) # [T_all, M]
-    #
-    # factor_all, sharpe_all = evaluate_sdf_factor(
-    #     gen,
-    #     R_all_np,
-    #     X_all_np,
-    #     macro_all_np,
-    #     mask_all_np,
-    #     device,
-    #     name="TRAIN+VALID"
-    # )
-    #
-    # # macro_cols is defined earlier as list of macro feature names
-    # macro_df = macro_regression_standardized(
-    #     factor_all,
-    #     macro_all_np,
-    #     macro_cols,
-    #     fname="macro_importance_standardized.csv"
-    # )
+    # factor_train, factor_valid compiled into factor_all
+    R_all_np     = np.concatenate([R_train,  R_valid],  axis=0)   # [T_all, N]
+    X_all_np     = np.concatenate([X_train,  X_valid],  axis=0)   # [T_all, N, F]
+    mask_all_np  = np.concatenate([mask_train, mask_valid], axis=0)   # [T_all, N]
+    macro_all_np = np.concatenate([macro_train, macro_valid], axis=0) # [T_all, M]
+    
+    factor_all, sharpe_all = evaluate_sdf_factor(
+        gen,
+        R_all_np,
+        X_all_np,
+        macro_all_np,
+        mask_all_np,
+        device,
+        name="TRAIN+VALID"
+    )
+    
+    # macro_cols is defined earlier as list of macro feature names
+    macro_df = macro_regression_standardized(
+        factor_all,
+        macro_all_np,
+        macro_cols,
+        fname="macro_importance_standardized.csv"
+    )
 
     results.append((sd, sharpe_test))
 
@@ -875,3 +864,4 @@ print("\n=== Summary ===")
 for seed, s in results:
 
     print(f"Seed {seed}: TEST Sharpe = {s:.3f}")
+
