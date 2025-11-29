@@ -23,11 +23,11 @@ January 2010 – September 2025 (monthly data)
 ### Data Setup:
 | Category              | Example Variables                             | Source                     |
 | --------------------- | --------------------------------------------- | -------------------------- |
-| **Past Returns**      | `r2_1`, `r12_2`, `r36_13`, `ST_Rev`, `LT_Rev` | Computed from close prices |
-| **Profitability**     | `ROE`, `OP`, `PM`, `ATO`                      | BaoStock fundamentals      |
+| **Past Returns**      | `r2_1`, `r12_2`, `r36_13`, `ST_Rev`, `LT_Rev` | Computed from close prices, data is from Baostock|
+| **Profitability**     | `ROE`, `OP`, `PM`, `ATO`                      | Tushare fundamentals       |
 | **Value**             | `BEME`, `S2P`, `CF2P`                         | Market + balance sheet     |
-| **Trading Frictions** | `Beta`, `Turnover`, `IdioVol`, `Spread`       | BaoStock daily data        |
-| **Macro Predictors**  | `GDP`, `CPI`, `M2`, `interest rates`, `credit spreads`  | WIND / PBoC datasets       |
+| **Trading Frictions** | `Beta`, `Turnover`, `IdioVol`, `Spread`       | Tushare daily data         |
+| **Macro Predictors**  | `GDP`, `CPI`, `M2`, `interest rates`, `credit spreads`  | WIND             |
 
 ### Data Timeline:
 | Phase      | Period    | Purpose                   |
