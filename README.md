@@ -20,6 +20,12 @@ January 2010 – September 2025 (monthly data)
 | **Beta Network (Discriminator)** | Predicts expected returns and enforces cross-sectional consistency.        |
 | **Training Objective**           | Min–Max adversarial loss minimizing pricing errors ( E[(M_t R_{t+1})^2] ). |
 
+<img width="1918" height="547" alt="image" src="https://github.com/user-attachments/assets/679b6e3f-3128-4505-8033-907831b9415e" />
+
+### Work Flow:
+<img width="2043" height="868" alt="image" src="https://github.com/user-attachments/assets/5212e78a-06c4-4829-99db-0cd703285934" />
+
+
 ### Data Setup:
 | Category              | Example Variables                             | Source                     |
 | --------------------- | --------------------------------------------- | -------------------------- |
